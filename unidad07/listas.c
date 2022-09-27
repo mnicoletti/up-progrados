@@ -13,6 +13,7 @@ La carga de datos finaliza cuando el número de legajo es igual a cero. Se pide:
 */
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
 
 typedef struct empleados {
     char nombre[20], apellido[20];
@@ -47,7 +48,7 @@ int main() {
         }
     }
 
-    nuevoPrimero = nuevoListado(sector, primero);
+    nuevoListado(sector, primero, nuevoPrimero);
     mostrarLista(nuevoPrimero);
     
     return 0;
@@ -72,9 +73,9 @@ void crearLista(listado *empleado) {
         do {
             printf("Ingrese sector: \n");
             scanf("%d", &empleado->sector);
-        } while( empleado->sector > 0 && empleado->sector < 4 );
+        } while( empleado->sector < 1 && empleado->sector > 3 );
 
-        empleado->next = (listado*)malloc(sizeof(empleados));
+        empleado->next = (listado*)malloc(sizeof(listado));
         crearLista(empleado->next);
     }
 
@@ -84,7 +85,7 @@ void crearLista(listado *empleado) {
 void mostrarLista(listado *empleado) {
     if (empleado->next != NULL ) {
         printf("Legajo: \t%d", empleado->legajo);
-        printf("Nombre y Apellido: \t%s %s", registro->nombre, registro->apellido);
+        printf("Nombre y Apellido: \t%s %s", empleado->nombre, empleado->apellido);
         printf("Sueldo: \t%.2f", empleado->sueldo);
         printf("Antiguedad: \t%d", empleado->antig);
         printf("Sector: \t%d", empleado->sector);
@@ -96,9 +97,9 @@ void mostrarLista(listado *empleado) {
 float calcularPromedioSueldos(listado *empleado, int contador, float sumador) {
     if(empleado->next != NULL) {
         if (empleado->sector == 2 && strlen(empleado->apellido) > 4) {
-            calcularPromedioSueldos(empleado->sig, contador+1, sumador + empleado->sueldo);
+            calcularPromedioSueldos(empleado->next, contador+1, sumador + empleado->sueldo);
         } else {
-            calcularPromedioSueldos(empleado->sig, contador, sumador);
+            calcularPromedioSueldos(empleado->next, contador, sumador);
         }
     }
 
@@ -106,9 +107,9 @@ float calcularPromedioSueldos(listado *empleado, int contador, float sumador) {
 }
 
 int contarEmpleados(int sect, int contador, listado *empleado) {
-    if (empleado->sig != NULL) {
+    if (empleado->next != NULL) {
         if (empleado->sector == sect) {
-            contarEmpleados(sect, contador+1, empleado->sig);
+            contarEmpleados(sect, contador+1, empleado->next);
         }
     }
 
@@ -116,18 +117,18 @@ int contarEmpleados(int sect, int contador, listado *empleado) {
 }
 
 void nuevoListado(int sect, listado *empleado, listado *nuevoEmpleado) {
-    while (empleado->sig != NULL) {
+    while (empleado->next != NULL) {
         if (empleado->antig > 3 && empleado->sector == sect) {
             nuevoEmpleado->legajo=empleado->legajo;
-            nuevoEmpleado->nombre=empleado->nombre;
-            nuevoEmpleado->apellido=empleado->apellido;
+            strcpy(nuevoEmpleado->nombre,empleado->nombre);
+            strcpy(nuevoEmpleado->apellido,empleado->apellido);
             nuevoEmpleado->antig=empleado->antig;
             nuevoEmpleado->sueldo=empleado->sueldo;
             nuevoEmpleado->sector=empleado->sector; // Esto podria simplemente insertar el sector que traje por parametro.
-            nuevoEmpleado->sig(listado*)malloc(sizeof(listado));
-            nuevoEmpleado=nuevoEmpleado->sig;
+            nuevoEmpleado->next=(listado*)malloc(sizeof(listado));
+            nuevoEmpleado=nuevoEmpleado->next;
         }
-        empleado=empleado->sig;
+        empleado=empleado->next;
     }
-    nuevoEmpleado->sig=NULL;
+    nuevoEmpleado->next=NULL;
 }
