@@ -24,7 +24,7 @@ typedef struct empleados {
 
 void crearLista(listado *empleado);
 void mostrarLista(listado *empleado);
-float calcularPromedioSueldos(listado *empleado, int, float);
+float calcularPromedioSueldos(listado *empleado);
 int contarEmpleados(int, int, listado *empleado);
 void nuevoListado(int, listado *empleado, listado *nuevoEmpleado);
 
@@ -37,7 +37,7 @@ int main() {
     primero=(listado*)malloc(sizeof(listado));
     crearLista(primero);
     mostrarLista(primero);
-    promedio = calcularPromedioSueldos(primero, 0, 0);
+    promedio = calcularPromedioSueldos(primero);
     printf("El promedio de sueldos para el sector 2 es: \t%.2f\n", promedio);
     
     for(i=0; i<3; i++) {
@@ -94,12 +94,13 @@ void mostrarLista(listado *empleado) {
     return;
 }
 
-float calcularPromedioSueldos(listado *empleado, int contador, float sumador) {
-    if(empleado->next != NULL) {
-        if (empleado->sector == 2 && strlen(empleado->apellido) > 4) {
-            calcularPromedioSueldos(empleado->next, contador+1, sumador + empleado->sueldo);
-        } else {
-            calcularPromedioSueldos(empleado->next, contador, sumador);
+float calcularPromedioSueldos(listado *empleado) {
+    int contador = 0;
+    float sumador = 0;
+    while (empleado->next != NULL) {
+        if(empleado->sector == 2) {
+            sumador = sumador + empleado->sueldo;
+            contador++;
         }
     }
 
