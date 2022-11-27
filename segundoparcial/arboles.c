@@ -7,13 +7,14 @@ typedef struct arbol {
     struct arbol *der;
 } treenode;
 
-void crear(treenode **hoja);
+int crear(treenode **hoja);
 void insertar(treenode **hoja, int elem);
 void mostrar(treenode *hoja);
 
 int main() {
     treenode* arbol=NULL;
-    crear(&arbol);
+    int raiz;
+    raiz = crear(&arbol);
     printf("Se muestra el arbol finalizado: \n\n\n");
     mostrar(arbol);
 
@@ -22,16 +23,20 @@ int main() {
 }
 
 void crear(treenode **hoja) {
-    int numero;
+    int numero, raiz;
 
     printf("Ingrese un numero: \n");
     scanf("%d", &numero);
+
+    raiz = numero;
 
     while (numero != -1) {
         insertar(&(*hoja), numero);
         printf("Ingrese un numero: \n");
         scanf("%d", &numero);
     }
+
+    return raiz;
 }
 
 void insertar(treenode **hoja, int elem) {
@@ -67,14 +72,10 @@ void mostrar(treenode *hoja) {
     return;
 }
 
-int cantidadHojas(treenode *hoja) {
-    if(hoja == NULL) {
-        return 0;
+int mayorDivRaiz(treenode *hoja, int raiz, int mayor) {
+    if(hoja != NULL) {
+        
     }
 
-    if(hoja->der == NULL && hoja->izq == NULL && hoja->dato % 2 != 0) {
-        return 1;
-    }
-
-    return cantidadHojas(hoja->izq) + cantidadHojas(hoja->der);
+    return mayor;
 }
